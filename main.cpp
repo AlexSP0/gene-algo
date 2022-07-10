@@ -1,3 +1,5 @@
+
+#include "bobtheresercher.h"
 #include "mainwindow.h"
 
 #include <QApplication>

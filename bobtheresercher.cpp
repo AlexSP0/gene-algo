@@ -2,7 +2,7 @@
 #include "QRandomGenerator"
 
 
-BobTheResercher::BobTheResercher(double crossRate, double mutateRate, int popSize, int numBits, int geneLen, Ui::MainWindow *window)
+BobTheResercher::BobTheResercher(double crossRate, double mutateRate, int popSize, int numBits, int geneLen)
 {
     populationSize = popSize;
     crossoverRate = crossRate; //Частота кроссовера
@@ -16,8 +16,6 @@ BobTheResercher::BobTheResercher(double crossRate, double mutateRate, int popSiz
     busy = false;
 
     currentGenome = 0;
-
-    bobsMap = std::make_unique<BobsMap>(BobsMap(window));
 
     createPopulation();
 }
@@ -70,20 +68,6 @@ Genome &BobTheResercher::rouletteWheelSelection()
     return populationGenoms[selectedGenome];
 }
 
-void BobTheResercher::updateFitnessScore(int currentGenome)
-{
-
-    double currentFitness = bobsMap.get()->testRoute(populationGenoms[currentGenome].bits, geneLength);
-
-    populationGenoms[currentGenome].fitness = currentFitness;
-
-    totalFitnessScore = totalFitnessScore + currentFitness;
-
-    if(currentFitness > bestFitnessScore) {
-        bestFitnessScore = currentFitness;
-    }
-}
-
 void BobTheResercher::createPopulation()
 {
     populationGenoms.clear();
@@ -93,32 +77,27 @@ void BobTheResercher::createPopulation()
     }
 }
 
-void BobTheResercher::run()
-{
-    updateFitnessScore(currentGenome);
-}
+//void BobTheResercher::epoch()
+//{
+//    updateFitnessScore(currentGenome);
+//    std::vector<Genome> newGeneration;
 
-void BobTheResercher::epoch()
-{
-    updateFitnessScore(currentGenome);
-    std::vector<Genome> newGeneration;
+//    for(size_t i = 0; i < populationSize; i++) {
+//        Genome dad = rouletteWheelSelection();
+//        Genome mum = rouletteWheelSelection();
 
-    for(size_t i = 0; i < populationSize; i++) {
-        Genome dad = rouletteWheelSelection();
-        Genome mum = rouletteWheelSelection();
+//        Genome baby1;
+//        Genome baby2;
 
-        Genome baby1;
-        Genome baby2;
+//        crossover(mum.bits, dad.bits, baby1.bits, baby2.bits);
 
-        crossover(mum.bits, dad.bits, baby1.bits, baby2.bits);
+//        mutate(baby1.bits);
+//        mutate(baby2.bits);
 
-        mutate(baby1.bits);
-        mutate(baby2.bits);
-
-        newGeneration.push_back(baby1);
-        newGeneration.push_back(baby2);
-    }
-}
+//        newGeneration.push_back(baby1);
+//        newGeneration.push_back(baby2);
+//    }
+//}
 
 int BobTheResercher::getGeneration()
 {
@@ -130,12 +109,3 @@ int BobTheResercher::getFittest()
     return fittestGenome;
 }
 
-bool BobTheResercher::isBusy()
-{
-    return busy;
-}
-
-void BobTheResercher::stop()
-{
-    busy = false;
-}

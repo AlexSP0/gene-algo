@@ -21,7 +21,6 @@ set(SOURCES
         genome.h genome.cpp
         bobtheresercher.h
         bobtheresercher.cpp
-        bobsmap.h bobsmap.cpp
         testmap.h
 )
 

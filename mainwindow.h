@@ -1,11 +1,14 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
-
 #include "bobtheresercher.h"
 
+#include <QMainWindow>
+
+class BobTheResercher;
+
 QT_BEGIN_NAMESPACE
+
 namespace Ui
 {
 class MainWindow;
@@ -31,19 +34,13 @@ public:
     MainWindow(QWidget *parent, std::vector<std::vector<char>>);
     ~MainWindow();
 
-    void renderMap();
-
-    void moveBob(int);
-    void resetBob();
-
-    int currentBob_x;
-    int currentBob_y;
-
-    int target_x;
-    int target_y;
 
 protected:
+
     void paintEvent(QPaintEvent *);
+
+    void timerEvent(QTimerEvent *);
+
 
 private:
     Ui::MainWindow *ui;
@@ -58,6 +55,15 @@ private:
     int MAP_WIDTH_X;
     int MAP_HEIGHT_Y;
 
+    int currentBob; //Текущий Боб, который идет домой
+    int currentGen; //Текущий ген Боба, который идет домой
+
+    int currentBob_x;
+    int currentBob_y;
+
+    int target_x;
+    int target_y;
+
     std::vector<std::vector<char>> labMap;
     std::vector<std::vector<char>> initialMap;
 
@@ -67,10 +73,16 @@ private:
     QImage freeSpaceImage;
     QImage visitedImage;
 
+    void renderMap(QPainter *);
+
+    void moveBob(int);
+    void resetBob();
+
+    double calculateFitness();
+    int convertBinaryToDecimal(int bin);
+    std::vector<int> convertBitsToDecimal(const std::vector<int> bits, int geneLen);
     void getCoordinates(int &x, int &y, char symbol);
-
-    void timerEvent(QTimerEvent);
-
     void setMap(std::vector<std::vector<char>> map);
+
 };
 #endif // MAINWINDOW_H
