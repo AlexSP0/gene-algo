@@ -4,7 +4,6 @@
 #include <genome.h>
 #include <vector>
 
-
 class BobTheResercher
 {
 public:
@@ -16,6 +15,10 @@ public:
     BobTheResercher(double, double, int, int, int);
 
     std::vector<Genome> populationGenoms;
+
+    void breedNewGeneration(int);
+
+    int getPopulationSize();
 
 private:
     int populationSize;
@@ -29,14 +32,16 @@ private:
     bool busy;
 
     void mutate(std::vector<int>);
-    void crossover(const std::vector<int>&, const std::vector<int>&,
-                   std::vector<int>&, std::vector<int>&);
-    Genome& rouletteWheelSelection();
+    void crossover(const std::vector<int> &,
+                   const std::vector<int> &,
+                   std::vector<int> &,
+                   std::vector<int> &);
+    Genome &rouletteWheelSelection();
 
     void createPopulation();
 
     int getGeneration();
-    int getFittest();
+    int getFittest(); // не реализован поиск самого успешного!
 };
 
 #endif // BOBTHERESERCHER_H
