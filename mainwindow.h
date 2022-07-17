@@ -25,7 +25,7 @@ const int WEST  = 3;
 const double CROSSOVER_RATE     = 0.7;
 const double MUTATE_RATE        = 0.001;
 const int POPULATION_SIZE       = 140;
-const int NUMBER_BITS           = 140;
+const int NUMBER_BITS           = 100;
 const int NUMBER_BITS_PER_GENE  = 2;
 const int NUMBER_OF_GENERATIONS = 10; //Количество поколений
 const float REDUCTION_RATIO     = 0.05;
@@ -65,11 +65,11 @@ private:
     int target_x;
     int target_y;
 
-    QString currentPopulationSizeStrin     = "current population size: %1";
-    QString currentGenerationString        = "current generation num: %1";
-    QString currentBobNumberString         = "current bob number: %1";
-    QString bestFitnessString              = "best fitness of generation: %1:";
-    QString totalFitnessOfGenerationString = "Total fitness of generation: %1";
+    QString currentPopulationSizeString    = "%1";
+    QString currentGenerationString        = "%1";
+    QString currentBobNumberString         = "%1";
+    QString bestFitnessString              = "%1";
+    QString totalFitnessOfGenerationString = "%1";
 
     std::vector<std::vector<char>> labMap;
     std::vector<std::vector<char>> initialMap;

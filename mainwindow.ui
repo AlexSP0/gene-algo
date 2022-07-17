@@ -79,6 +79,16 @@
      <string>Total fitness in this generation:</string>
     </property>
    </widget>
+   <widget class="QTableWidget" name="resultsTable">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>260</y>
+      <width>256</width>
+      <height>192</height>
+     </rect>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

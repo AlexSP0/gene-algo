@@ -35,7 +35,7 @@ MainWindow::MainWindow(QWidget *parent, std::vector<std::vector<char>> map)
     setMap(map);
     resetBob();
 
-    timerId = startTimer(2);
+    timerId = startTimer(1);
 
     repaint();
 }
@@ -131,25 +131,54 @@ void MainWindow::setMap(std::vector<std::vector<char>> map)
     labMap     = map;
     initialMap = map;
 
+    resize(MAP_WIDTH_X * 15 + 250,
+           MAP_HEIGHT_Y * 10 + 22 * NUMBER_OF_GENERATIONS + (MAP_HEIGHT_Y * 10 + 15 * 0) + 25);
+    this->repaint();
+
     ui->currentPopulationSize->move(3, MAP_HEIGHT_Y * 10 + 15 * 0);
     ui->currentGeneration->move(3, MAP_HEIGHT_Y * 10 + 15 * 1);
     ui->currentBobMoving->move(3, MAP_HEIGHT_Y * 10 + 15 * 2);
     ui->bestFitnesInGeneration->move(3, MAP_HEIGHT_Y * 10 + 15 * 3);
     ui->TotalfitnessInThisGeneration->move(3, MAP_HEIGHT_Y * 10 + 15 * 4);
 
-    resize(MAP_WIDTH_X * 10 + 50, MAP_HEIGHT_Y * 10 + 15 * 7);
+    ui->resultsTable->move(0, MAP_HEIGHT_Y * 10 + 15 * 0);
+    ui->resultsTable->setColumnCount(5);
+    ui->resultsTable->setFixedHeight(MAP_HEIGHT_Y * 10 + 22 * NUMBER_OF_GENERATIONS);
+    ui->resultsTable->setFixedWidth(MAP_WIDTH_X * 15 + 250);
+
+    QStringList headers;
+    headers << "Generation"
+            << "Population"
+            << "Current Bob"
+            << "Best Fitness"
+            << "Total fitness";
+    ui->resultsTable->setHorizontalHeaderLabels(headers);
+    ui->resultsTable->insertRow(resercher->generationNumber);
+
     this->repaint();
 }
 
 void MainWindow::setStrings()
 {
-    ui->currentPopulationSize->setText(
-        currentPopulationSizeStrin.arg(resercher->getPopulationSize()));
-    ui->currentGeneration->setText(currentGenerationString.arg(resercher->generationNumber));
-    ui->currentBobMoving->setText(currentBobNumberString.arg(currentBob));
-    ui->bestFitnesInGeneration->setText(bestFitnessString.arg(resercher->bestFitnessScore));
-    ui->TotalfitnessInThisGeneration->setText(
-        totalFitnessOfGenerationString.arg(resercher->totalFitnessScore));
+    ui->resultsTable->setItem(resercher->generationNumber,
+                              0,
+                              new QTableWidgetItem(
+                                  currentGenerationString.arg(resercher->generationNumber)));
+    ui->resultsTable->setItem(resercher->generationNumber,
+                              1,
+                              new QTableWidgetItem(
+                                  currentPopulationSizeString.arg(resercher->getPopulationSize())));
+    ui->resultsTable->setItem(resercher->generationNumber,
+                              2,
+                              new QTableWidgetItem(currentBobNumberString.arg(currentBob)));
+    ui->resultsTable->setItem(resercher->generationNumber,
+                              3,
+                              new QTableWidgetItem(
+                                  bestFitnessString.arg(resercher->bestFitnessScore)));
+    ui->resultsTable->setItem(resercher->generationNumber,
+                              4,
+                              new QTableWidgetItem(totalFitnessOfGenerationString.arg(
+                                  resercher->totalFitnessScore)));
 }
 
 void MainWindow::moveBob(int direction)
@@ -256,6 +285,7 @@ void MainWindow::processAllGenerations()
             int newPopulationSize = resercher->getPopulationSize()
                                     - resercher->getPopulationSize() * REDUCTION_RATIO;
             resercher->breedNewGeneration(newPopulationSize);
+            ui->resultsTable->insertRow(resercher->generationNumber);
             currentBob = 0;
             resetBob();
         }
